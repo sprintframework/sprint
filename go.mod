@@ -7,9 +7,8 @@ require (
 	github.com/codeallergy/uuid v1.1.0
 	github.com/keyvalstore/store v1.3.0
 	github.com/pkg/errors v0.9.1
-	github.com/sprintframework/sprintpb v1.2.0
+	github.com/sprintframework/sprintpb v1.2.1
 	go.uber.org/zap v1.24.0
-	golang.org/x/crypto v0.6.0
 	google.golang.org/grpc v1.53.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
