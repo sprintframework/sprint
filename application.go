@@ -46,6 +46,11 @@ var ComponentClass = reflect.TypeOf((*Component)(nil)).Elem()
 type Component interface {
 	glue.NamedBean
 
+	/**
+	Gets status with name=value key pair.
+	Server responds status request with stats ordered by key.
+	 */
+
 	GetStats(cb func(name, value string) bool) error
 }
 
@@ -129,7 +134,15 @@ var SystemEnvironmentPropertyResolverClass = reflect.TypeOf((*SystemEnvironmentP
 
 type SystemEnvironmentPropertyResolver interface {
 
+	/**
+	Prompt property from console
+	 */
+
 	PromptProperty(key string) (string, bool)
+
+	/**
+	Return all properties prompt early with values or without.
+	 */
 
 	Environ(withValues bool) []string
 
@@ -140,9 +153,22 @@ var ApplicationFlagsClass = reflect.TypeOf((*ApplicationFlags)(nil)).Elem()
 type ApplicationFlags interface {
 	glue.PropertyResolver
 
+	/**
+	Flag indicates that process is running in background mode.
+	 */
+
 	Daemon() bool
 
+	/**
+	Flag indicates that additional logging should post in console on startup,
+	For example the context creation and beans initialization steps.
+	 */
+
 	Verbose() bool
+
+	/**
+	Returns the override properties from console line
+	 */
 
 	Properties() map[string]string
 
@@ -151,7 +177,15 @@ type ApplicationFlags interface {
 var FlagSetRegistrarClass = reflect.TypeOf((*FlagSetRegistrar)(nil)).Elem()
 
 type FlagSetRegistrar interface {
+
+	/**
+	Registers listener for FlagSet object in order to add custom flags.
+	 */
 	RegisterFlags(fs *flag.FlagSet)
+
+	/**
+	Adds additional args to restart the server.
+	 */
 
 	RegisterServerArgs(args []string) []string
 }

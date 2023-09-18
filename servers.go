@@ -28,6 +28,11 @@ var ServerScannerClass = reflect.TypeOf((*ServerScanner)(nil)).Elem()
 
 type ServerScanner interface {
 
+	/**
+	Usually we have only one server, therefore we do not needs server name.
+	Return only server beans.
+	 */
+
 	ServerBeans() []interface{}
 
 }
@@ -38,13 +43,36 @@ type Server interface {
 	glue.InitializingBean
 	glue.DisposableBean
 
+	/**
+	Bind server to the port.
+	We separated it from the Serve, because we want to start application even if some servers were not able to bind.
+	 */
+
 	Bind() error
+
+	/**
+	Checks if server alive.
+	 */
 
 	Active() bool
 
+	/**
+	Gets the actual listen address that could be different from bind address.
+	The good example is if you bing to ip:0 it would have random port assigned to the socket.
+	 */
+
 	ListenAddress() net.Addr
 
+	/**
+	Runs actual server. The error code is the server exit code.
+	We automatically filtering the 'closed' socket error codes, because they does not bring something valuable.
+	 */
+
 	Serve() error
+
+	/**
+	Stops server by request.
+	 */
 
 	Stop()
 }
@@ -57,6 +85,10 @@ var PageClass = reflect.TypeOf((*Page)(nil)).Elem()
 
 type Page interface {
 	http.Handler
+
+	/**
+	Returns the url pattern used to serve the page.
+	 */
 
 	Pattern() string
 }

@@ -12,6 +12,10 @@ import (
 	"log"
 )
 
+/**
+Checks that application started with verbose flag in command line.
+ */
+
 func IsVerbose(parent glue.Context) (verbose bool) {
 
 	list := parent.Bean(ApplicationFlagsClass, glue.DefaultLevel)
@@ -24,6 +28,10 @@ func IsVerbose(parent glue.Context) (verbose bool) {
 
 	return
 }
+
+/**
+Finds client scanner by name.
+ */
 
 func FindClientScanner(parent glue.Context, scannerName string) (ClientScanner, error) {
 
@@ -58,6 +66,10 @@ func FindClientScanner(parent glue.Context, scannerName string) (ClientScanner, 
 
 }
 
+/**
+Connects to the particular rpc server by using client scanner name and executes the callback function.
+ */
+
 func DoWithClientConn(parent glue.Context, scannerName string, cb func(*grpc.ClientConn) error) error {
 
 	verbose := IsVerbose(parent)
@@ -91,6 +103,10 @@ func DoWithClientConn(parent glue.Context, scannerName string, cb func(*grpc.Cli
 	}
 
 }
+
+/**
+Connects to the control rpc server and executes callback function.
+ */
 
 func DoWithControlClient(parent glue.Context, cb func(ControlClient) error) error {
 
