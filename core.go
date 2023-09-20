@@ -159,6 +159,13 @@ type NodeService interface {
 	NodeIdHex() string
 
 	/**
+	Returns the node name, that is combination of application name and node sequence number.
+	If node sequence number equal zero, then node name is the application name.
+	*/
+
+	NodeName() string
+
+	/**
 	Issue random time based UUID number having node id, current timestamp and random number.
 	Perfect candidate to identity ordered events in distributed systems.
 	 */
