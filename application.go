@@ -167,6 +167,12 @@ type ApplicationFlags interface {
 	Verbose() bool
 
 	/**
+	Returns the sequence number of the running node.
+	*/
+
+	Node() int
+
+	/**
 	Returns the override properties from console line
 	 */
 
