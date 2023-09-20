@@ -166,6 +166,12 @@ type NodeService interface {
 	NodeName() string
 
 	/**
+	Returns the node sequence number.
+	*/
+
+	NodeSeq() int
+
+	/**
 	Issue random time based UUID number having node id, current timestamp and random number.
 	Perfect candidate to identity ordered events in distributed systems.
 	 */
