@@ -9,6 +9,7 @@ import (
 	"context"
 	"flag"
 	"github.com/codeallergy/glue"
+	"github.com/hashicorp/go-hclog"
 	"go.uber.org/zap"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"net/http"
@@ -16,7 +17,8 @@ import (
 )
 
 var (
-	LogClass = reflect.TypeOf((*zap.Logger)(nil)) // *zap.Logger
+	ZapLogClass = reflect.TypeOf((*zap.Logger)(nil)) // *zap.Logger
+	HCLogClass = reflect.TypeOf((*hclog.Logger)(nil)).Elem() // hclog.Logger interface
 	LumberjackClass = reflect.TypeOf((*lumberjack.Logger)(nil)) // *lumberjack.Logger
 
 	FileSystemClass = reflect.TypeOf((*http.FileSystem)(nil)).Elem() // http.FileSystem
