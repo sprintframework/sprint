@@ -39,6 +39,19 @@ type ServerScanner interface {
 
 var ServerClass = reflect.TypeOf((*Server)(nil)).Elem()
 
+type EmptyAddrType struct {
+}
+
+func (t EmptyAddrType) Network() string {
+	return ""
+}
+
+func (t EmptyAddrType) String() string {
+	return ""
+}
+
+var EmptyAddr = EmptyAddrType{}
+
 type Server interface {
 	glue.InitializingBean
 	glue.DisposableBean
@@ -54,11 +67,13 @@ type Server interface {
 	Checks if server alive.
 	 */
 
-	Active() bool
+	Alive() bool
 
 	/**
 	Gets the actual listen address that could be different from bind address.
 	The good example is if you bing to ip:0 it would have random port assigned to the socket.
+
+	For non active server return EmptyAddr
 	 */
 
 	ListenAddress() net.Addr
@@ -71,10 +86,18 @@ type Server interface {
 	Serve() error
 
 	/**
-	Stops server by request.
+	Shutdown server by the request.
 	 */
 
-	Stop()
+	Shutdown()
+
+	/**
+	ShutdownCh returns a channel that can be selected to wait
+	for the server to perform a shutdown.
+	 */
+
+	ShutdownCh() <-chan struct{}
+
 }
 
 /**
