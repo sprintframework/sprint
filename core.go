@@ -159,11 +159,37 @@ type NodeService interface {
 	NodeIdHex() string
 
 	/**
-	Returns the node name, that is combination of application name and node sequence number.
+	Returns the node local name, that is combination of application name and node sequence number.
 	If node sequence number equal zero, then node name is the application name.
 	*/
 
-	NodeName() string
+	LocalName() string
+
+	/**
+	Returns the node LAN name, that has default combination of application name, node sequence number and hostname.
+	For zero sequence number equal zero does not append it.
+	Override default value in properties under 'node.lan'.
+	Primary usage in distributed protocols for human visibility instead of unique node id.
+	*/
+
+	LANName() string
+
+	/**
+	Returns the node WAN name, that is default combination of application name, node sequence number, hostname and datacenter name.
+	For zero sequence number equal zero does not append it.
+	Override default value in properties under 'node.wan'.
+	Datacenter name comes from 'node.dc' or 'default'
+	Primary usage in distributed protocols for human visibility instead of unique node id.
+	*/
+
+	WANName() string
+
+	/**
+	Returns datacenter name or 'default'.
+	Datacenter name comes from 'node.dc' property.
+	 */
+
+	DCName() string
 
 	/**
 	Returns the node sequence number.
