@@ -89,7 +89,7 @@ type Server interface {
 	Shutdown server by the request.
 	 */
 
-	Shutdown()
+	Shutdown() error
 
 	/**
 	ShutdownCh returns a channel that can be selected to wait
