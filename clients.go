@@ -13,21 +13,7 @@ import (
 )
 
 var GrpcClientConnClass = reflect.TypeOf((*grpc.ClientConn)(nil))   // *grpc.ClientConn
-var ClientScannerClass = reflect.TypeOf((*ClientScanner)(nil)).Elem()
 
-type ClientScanner interface {
-
-	/**
-		Should return unique scanner name to debug and logging needs, the source of the bean.
-	*/
-	ScannerName() string
-
-	/**
-		List of all client beans.
-	 */
-	ClientBeans() []interface{}
-
-}
 
 var CommandClass = reflect.TypeOf((*Command)(nil)).Elem()
 

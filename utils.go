@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 	"log"
+	"strings"
 )
 
 /**
@@ -30,65 +31,49 @@ func IsVerbose(parent glue.Context) (verbose bool) {
 }
 
 /**
-Finds client scanner by name.
+Filters child context list by role.
+
+Uses direct match or suffix match.
+Filter child context by suffix '-{role}' or '{role}'.
  */
 
-func FindClientScanner(parent glue.Context, scannerName string) (ClientScanner, error) {
+func FilterChildrenByRole(parent glue.Context, role string) []glue.ChildContext {
 
-	list := parent.Bean(ClientScannerClass, glue.DefaultLevel)
+	suffix :=  "-" + role
 
-	if scannerName == "" {
-		if len(list) != 1 {
-			return nil, errors.Errorf("application context should have one client scanner, but found '%d'", len(list))
-		}
+	var children []glue.ChildContext
 
-		bean := list[0]
-
-		scanner, ok := bean.Object().(ClientScanner)
-		if !ok {
-			return nil, errors.Errorf("invalid object '%v' found instead of sprint.ClientScanner in application context", bean.Class())
-		}
-
-		return scanner, nil
-	}
-
-	for i, bean := range list {
-		scanner, ok := bean.Object().(ClientScanner)
-		if !ok {
-			return nil, errors.Errorf("invalid object '%v' found on position %d instead of sprint.ClientScanner in application context", bean.Class(), i)
-		}
-		if scanner.ScannerName() == scannerName {
-			return scanner, nil
+	// filter child context by suffix '-{role}' or '{role}'
+	for _, child := range parent.Children() {
+		childRole := child.Role()
+		if childRole == role || strings.HasSuffix(childRole, suffix) {
+			children = append(children, child)
 		}
 	}
 
-	return nil, errors.Errorf("client scanner '%s' not found in application context", scannerName)
-
+	return children
 }
 
 /**
-Connects to the particular rpc server by using client scanner name and executes the callback function.
+Connects to the particular rpc server by using client role name and executes the callback function.
  */
 
-func DoWithClientConn(parent glue.Context, scannerName string, cb func(*grpc.ClientConn) error) error {
+func DoWithClientConn(parent glue.Context, role string, cb func(*grpc.ClientConn) error) error {
 
 	verbose := IsVerbose(parent)
-	scanner, err := FindClientScanner(parent, scannerName)
-	if err != nil {
-		return err
-	}
-
-	beans := scanner.ClientBeans()
 	if verbose {
-		verbose := glue.Verbose{ Log: log.Default() }
-		beans = append([]interface{}{verbose}, beans...)
+		glue.Verbose(log.Default())
 	}
 
-	ctx, err := parent.Extend(beans...)
-	if err != nil {
-		return err
+	children := FilterChildrenByRole(parent, role)
+	if len(children) != 1 {
+		return errors.Errorf("application context should have only one client child context, but found '%d' for the role '%s'", len(children), role)
 	}
-	defer ctx.Close()
+
+	ctx, err := children[0].Object()
+	if err != nil {
+		return errors.Errorf("child '%s' context error, %v", role, err)
+	}
 
 	list := ctx.Bean(GrpcClientConnClass, glue.DefaultLevel)
 	if len(list) != 1 {
@@ -111,22 +96,20 @@ Connects to the control rpc server and executes callback function.
 func DoWithControlClient(parent glue.Context, cb func(ControlClient) error) error {
 
 	verbose := IsVerbose(parent)
-	scanner, err := FindClientScanner(parent, "control")
-	if err != nil {
-		return err
-	}
-
-	beans := scanner.ClientBeans()
 	if verbose {
-		verbose := glue.Verbose{ Log: log.Default() }
-		beans = append([]interface{}{verbose}, beans...)
+		glue.Verbose(log.Default())
 	}
 
-	ctx, err := parent.Extend(beans...)
-	if err != nil {
-		return err
+	children := FilterChildrenByRole(parent, ControlClientRole)
+
+	if len(children) != 1 {
+		return errors.Errorf("application context should have only one child context, but found '%d' for the role '%s'", len(children), ControlClientRole)
 	}
-	defer ctx.Close()
+
+	ctx, err := children[0].Object()
+	if err != nil {
+		return errors.Errorf("child '%s' context error, %v", ControlClientRole, err)
+	}
 
 	list := ctx.Bean(ControlClientClass, glue.DefaultLevel)
 	if len(list) != 1 {

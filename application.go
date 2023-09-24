@@ -25,21 +25,6 @@ var (
 	FlagSetClass    = reflect.TypeOf((*flag.FlagSet)(nil))           // *flag.FlagSet
 )
 
-var CoreScannerClass = reflect.TypeOf((*CoreScanner)(nil)).Elem()
-
-/**
-	Core scanner is using to find beans to create core context when application is already created.
-*/
-type CoreScanner interface {
-
-	/**
-	Gets core beans that will extend application beans, parent context.
-	 */
-	CoreBeans() []interface{}
-
-}
-
-
 /**
 Generic component class that has a name
 */

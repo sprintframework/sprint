@@ -24,19 +24,6 @@ var (
 	HttpServerClass    = reflect.TypeOf((*http.Server)(nil))   // *http.Server
 )
 
-var ServerScannerClass = reflect.TypeOf((*ServerScanner)(nil)).Elem()
-
-type ServerScanner interface {
-
-	/**
-	Usually we have only one server, therefore we do not needs server name.
-	Return only server beans.
-	 */
-
-	ServerBeans() []interface{}
-
-}
-
 var ServerClass = reflect.TypeOf((*Server)(nil)).Elem()
 
 type EmptyAddrType struct {
