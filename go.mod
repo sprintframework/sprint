@@ -2,7 +2,7 @@ module github.com/sprintframework/sprint
 
 go 1.17
 
-replace github.com/codeallergy/glue => ../../codeallergy/glue
+//replace github.com/codeallergy/glue => ../../codeallergy/glue
 
 require (
 	github.com/codeallergy/glue v1.1.1
