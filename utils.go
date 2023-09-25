@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 	"log"
+	"reflect"
 	"strings"
 )
 
@@ -95,32 +96,43 @@ Connects to the control rpc server and executes callback function.
 
 func DoWithControlClient(parent glue.Context, cb func(ControlClient) error) error {
 
+	return DoWithClient(parent, ControlClientRole, ControlClientClass, func(instance interface{}) error {
+		if client, ok := instance.(ControlClient); ok {
+			return cb(client)
+		} else {
+			return errors.Errorf("invalid object '%v' found instead of sprint.ControlClient in client context", reflect.TypeOf(instance).String())
+		}
+	})
+
+}
+
+/**
+Connects to the rpc server and executes callback function.
+*/
+
+func DoWithClient(parent glue.Context, role string, clientType reflect.Type, cb func(clientInstance interface{}) error) error {
+
 	verbose := IsVerbose(parent)
 	if verbose {
 		glue.Verbose(log.Default())
 	}
 
-	children := FilterChildrenByRole(parent, ControlClientRole)
+	children := FilterChildrenByRole(parent, role)
 
 	if len(children) != 1 {
-		return errors.Errorf("application context should have only one child context, but found '%d' for the role '%s'", len(children), ControlClientRole)
+		return errors.Errorf("application context should have only one child context for role '%s', but found '%d''", role, len(children), ControlClientRole)
 	}
 
 	ctx, err := children[0].Object()
 	if err != nil {
-		return errors.Errorf("child '%s' context error, %v", ControlClientRole, err)
+		return errors.Errorf("child '%s' context error, %v", role, err)
 	}
 
-	list := ctx.Bean(ControlClientClass, glue.DefaultLevel)
+	list := ctx.Bean(clientType, glue.DefaultLevel)
 	if len(list) != 1 {
-		return errors.Errorf("client context should have one sprint.ControlClient inference, but found '%d'", len(list))
+		return errors.Errorf("client context should have one '%s' inference, but found '%d'", clientType.String(), len(list))
 	}
-	bean := list[0]
 
-	if client, ok := bean.Object().(ControlClient); ok {
-		return cb(client)
-	} else {
-		return errors.Errorf("invalid object '%v' found instead of sprint.ControlClient in client context", bean.Class())
-	}
+	return cb(list[0])
 
 }
