@@ -120,7 +120,7 @@ func DoWithClient(parent glue.Context, role string, clientType reflect.Type, cb 
 	children := FilterChildrenByRole(parent, role)
 
 	if len(children) != 1 {
-		return errors.Errorf("application context should have only one child context for role '%s', but found '%d''", role, len(children), ControlClientRole)
+		return errors.Errorf("application context should have only one child context for role '%s', but found '%d''", role, len(children))
 	}
 
 	ctx, err := children[0].Object()
@@ -133,6 +133,6 @@ func DoWithClient(parent glue.Context, role string, clientType reflect.Type, cb 
 		return errors.Errorf("client context should have one '%s' inference, but found '%d'", clientType.String(), len(list))
 	}
 
-	return cb(list[0])
+	return cb(list[0].Object())
 
 }
