@@ -550,8 +550,8 @@ github.com/cncf/xds/go v0.0.0-20211011173535-cb28da3451f1/go.mod h1:eXthEFrGJvWH
 github.com/cncf/xds/go v0.0.0-20220314180256-7f1daf1720fc/go.mod h1:eXthEFrGJvWHgFFCl3hGmgk+/aYT6PnTQLykKQRLhEs=
 github.com/cncf/xds/go v0.0.0-20230105202645-06c439db220b/go.mod h1:eXthEFrGJvWHgFFCl3hGmgk+/aYT6PnTQLykKQRLhEs=
 github.com/codeallergy/glue v1.1.0/go.mod h1:7FDCk+rgtr7r51AjDEBcBaZDHHl+TJKKWcTSXV/K8po=
-github.com/codeallergy/glue v1.1.1 h1:5qxZ1i+MBa6Oe86yoLxUMT45kwWnr27C1vUVZEzNwww=
-github.com/codeallergy/glue v1.1.1/go.mod h1:7FDCk+rgtr7r51AjDEBcBaZDHHl+TJKKWcTSXV/K8po=
+github.com/codeallergy/glue v1.1.2 h1:vGY4yAXVVcrZS80bPR6tYUeFa7YMKQ3JviQiwCN1lA8=
+github.com/codeallergy/glue v1.1.2/go.mod h1:7FDCk+rgtr7r51AjDEBcBaZDHHl+TJKKWcTSXV/K8po=
 github.com/codeallergy/uuid v1.1.0 h1:/3CB9FUL/oREHjNItQoa9zqimTnq30T4BmCjmDrCyZA=
 github.com/codeallergy/uuid v1.1.0/go.mod h1:YZPyxkCJcuqQIK77r7AMoZn2OQDmij/bU59VuPslGT4=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=

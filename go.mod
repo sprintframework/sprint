@@ -5,7 +5,7 @@ go 1.17
 //replace github.com/codeallergy/glue => ../../codeallergy/glue
 
 require (
-	github.com/codeallergy/glue v1.1.1
+	github.com/codeallergy/glue v1.1.2
 	github.com/codeallergy/uuid v1.1.0
 	github.com/hashicorp/go-hclog v1.5.0
 	github.com/keyvalstore/store v1.3.0
