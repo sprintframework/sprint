@@ -360,6 +360,12 @@ type AuthorizationMiddleware interface {
 	Authenticate(ctx context.Context) (context.Context, error)
 
 	/**
+	Authenticates user by using header from HTTP/gRPC request.
+	 */
+
+	AuthenticateByHeader(authHeader string) (*AuthorizedUser, bool)
+
+	/**
 	Gets AuthorizedUser from the Context. In case of missing of the object calls Authenticate.
 	 */
 

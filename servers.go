@@ -88,12 +88,12 @@ type Server interface {
 }
 
 /**
-Page interface for html pages
+Router interface for routing the HTTP request to specific pattern.
  */
 
-var PageClass = reflect.TypeOf((*Page)(nil)).Elem()
+var RouterClass = reflect.TypeOf((*Router)(nil)).Elem()
 
-type Page interface {
+type Router interface {
 	http.Handler
 
 	/**
